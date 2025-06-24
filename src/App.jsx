@@ -3,6 +3,10 @@ import { account } from "./appwriteConfig";
 import { ID } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
+import emailjs from 'emailjs-com';
+
+emailjs.init(import.meta.env.VITE_EMAILJS_USER_ID);
+
 
 
 function App() {
@@ -31,6 +35,8 @@ function App() {
     if (score === 3) return { label: "Strong", color: "green" };
   };
 
+  const navigate = useNavigate();
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -41,6 +47,7 @@ function App() {
     if (!email.trim()) return alert("Please enter an email address");
 
     try {
+      // 1. Create the user account (User exists, but is NOT logged in yet)
       const res = await account.create(
         ID.unique(),
         email,
@@ -50,42 +57,66 @@ function App() {
       console.log("User created:", res);
       alert("Account created successfully!");
 
-      // ✅ Send actual verification email
-    await account.createVerification('http://localhost:5173/welcome');
-    alert("A verification email has been sent. Please check your inbox!");
-
-
+      // 2. IMPORTANT: Log the user in to create a session
+      // This changes the user's role from 'guest' to 'user' for subsequent requests
       await account.createEmailPasswordSession(email, password);
+      console.log("User session created.");
+      // At this point, the user is authenticated, and subsequent requests
+      // will have the 'account' scope.
+
+      // 3. Send verification email (Now it should work because the user is logged in)
+      await account.createVerification('http://localhost:5173/welcome');
+      alert("A verification email has been sent. Please check your inbox!");
+
+      // 4. Send custom welcome email using EmailJS (This is fine after session)
+      emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          username: username.trim(), // Use actual username
+          email: email, // Use actual email
+        },
+        import.meta.env.VITE_EMAILJS_USER_ID
+      )
+      .then((result) => {
+        console.log('✅ Email sent:', result.text);
+      })
+      .catch((error) => {
+        console.error('❌ Error sending email:', error);
+      });
+
+      // 5. Navigate to the welcome page
       navigate("/welcome");
+
     } catch (err) {
-      // ✅ Put your improved error handler here
       if (err.code === 429) {
         alert("Too many requests. Please wait a minute and try again.");
       } else if (err.code === 409) {
         alert("User already exists. Try logging in.");
       } else {
+        // Log the full error to understand other potential issues
+        console.error("Appwrite signup error:", err);
         alert(err.message || "Signup failed");
       }
-      console.error("Appwrite error:", err);
     }
   };
 
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const user = await account.get();
-        if (user) {
-          navigate("/welcome");
-        }
-      } catch (err) {
-        console.log("Not logged in");
-      }
-    };
 
-    checkUser();
-  }, []);
+  // useEffect(() => {
+  //   const checkUser = async () => {
+  //     try {
+  //       const user = await account.get();
+  //       if (user) {
+  //         navigate("/welcome");
+  //       }
+  //     } catch (err) {
+  //       console.log("Not logged in");
+  //     }
+  //   };
+
+  //   checkUser();
+  // }, []);
 
   return (
     <div style={containerStyle}>
