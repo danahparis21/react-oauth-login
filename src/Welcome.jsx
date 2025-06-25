@@ -14,7 +14,7 @@ function Welcome() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const hasSent = useRef(false); // ✅ move this INSIDE the component
+  const hasSent = useRef(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -35,12 +35,12 @@ function Welcome() {
         console.log("👤 User fetched:", user);
         console.log("🔍 Email verified?", user.emailVerification);
 
-        // ✅ Prevent multiple sends
+      
         if (
           user.emailVerification &&
-          !localStorage.getItem("welcomeSent") &&
+          !localStorage.getItem(`welcomeSent:${user.$id}`) &&
           !hasSent.current
-        ) {
+        ){
           console.log("📨 Condition passed, preparing to send email...");
           hasSent.current = true;
 
@@ -55,7 +55,8 @@ function Welcome() {
           );
 
           console.log("✅ Welcome Email Sent to verified user");
-          localStorage.setItem("welcomeSent", "true");
+          localStorage.setItem(`welcomeSent:${user.$id}`, "true");
+
         }
       } catch (err) {
         console.error("Not logged in or verification failed:", err);
@@ -68,7 +69,7 @@ function Welcome() {
 
   const handleLogout = async () => {
     await account.deleteSessions();
-    localStorage.removeItem("welcomeSent"); // 🔄 reset for next login
+    localStorage.removeItem("welcomeSent"); 
     navigate("/");
   };
 

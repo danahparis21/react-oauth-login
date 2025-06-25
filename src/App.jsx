@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { account } from "./appwriteConfig";
 import { ID } from "appwrite";
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
-import emailjs from 'emailjs-com';
+import { Link } from "react-router-dom";
+import emailjs from "emailjs-com";
+import "./App.css";
 
 emailjs.init(import.meta.env.VITE_EMAILJS_USER_ID);
-
-
 
 function App() {
   const [username, setUsername] = useState("");
@@ -36,7 +35,7 @@ function App() {
   };
 
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -47,7 +46,7 @@ function App() {
     if (!email.trim()) return alert("Please enter an email address");
 
     try {
-      // 1. Create the user account (User exists, but is NOT logged in yet)
+      // ✅ Create the user account
       const res = await account.create(
         ID.unique(),
         email,
@@ -57,51 +56,24 @@ function App() {
       console.log("User created:", res);
       alert("Account created successfully!");
 
-      // 2. IMPORTANT: Log the user in to create a session
-      // This changes the user's role from 'guest' to 'user' for subsequent requests
       await account.createEmailPasswordSession(email, password);
       console.log("User session created.");
-      // At this point, the user is authenticated, and subsequent requests
-      // will have the 'account' scope.
 
-      // 3. Send verification email (Now it should work because the user is logged in)
-      await account.createVerification('http://localhost:5173/welcome');
+      await account.createVerification("http://localhost:5173/welcome");
       alert("A verification email has been sent. Please check your inbox!");
 
-      // 4. Send custom welcome email using EmailJS (This is fine after session)
-      emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
-          username: username.trim(), // Use actual username
-          email: email, // Use actual email
-        },
-        import.meta.env.VITE_EMAILJS_USER_ID
-      )
-      .then((result) => {
-        console.log('✅ Email sent:', result.text);
-      })
-      .catch((error) => {
-        console.error('❌ Error sending email:', error);
-      });
-
-      // 5. Navigate to the welcome page
       navigate("/welcome");
-
     } catch (err) {
       if (err.code === 429) {
         alert("Too many requests. Please wait a minute and try again.");
       } else if (err.code === 409) {
         alert("User already exists. Try logging in.");
       } else {
-        // Log the full error to understand other potential issues
         console.error("Appwrite signup error:", err);
         alert(err.message || "Signup failed");
       }
     }
   };
-
-
 
   // useEffect(() => {
   //   const checkUser = async () => {
@@ -119,9 +91,48 @@ function App() {
   // }, []);
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle} className="animated-bg">
+      <div
+        className="glass-circle"
+        style={{
+          position: "absolute",
+          width: "200px",
+          height: "200px",
+          borderRadius: "50%",
+          background: "rgba(255, 255, 255, 0.05)",
+          backdropFilter: "blur(10px)",
+          top: "20%",
+          left: "10%",
+          zIndex: 0,
+        }}
+      ></div>
+
+      <div
+        className="glass-circle"
+        style={{
+          position: "absolute",
+          width: "300px",
+          height: "300px",
+          borderRadius: "50%",
+          background: "rgba(255, 255, 255, 0.03)",
+          backdropFilter: "blur(15px)",
+          bottom: "10%",
+          right: "15%",
+          zIndex: 0,
+        }}
+      ></div>
+
       <div style={formWrapperStyle}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Sign Up</h2>
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+            color: "#fff",
+            textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+          }}
+        >
+          Sign Up
+        </h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -216,7 +227,7 @@ function App() {
               account.createOAuth2Session(
                 "google",
                 "http://localhost:5173/welcome", // Redirect on success
-                "http://localhost:5173/" // Redirect on failure (optional)
+                "http://localhost:5173/" // Redirect on failure
               )
             }
             style={{
@@ -244,37 +255,82 @@ const containerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  backgroundColor: "#f9fafb",
+  background: "linear-gradient(-45deg, #6b4f3b, #8b7e74, #5c5148, #92877d)",
+  backgroundSize: "400% 400%",
+  fontFamily: "'Lora', serif",
 };
 
 const formWrapperStyle = {
   width: "100%",
-  maxWidth: "400px",
-  background: "#fff",
+  maxWidth: "420px",
   padding: "30px",
-  borderRadius: "8px",
-  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+  borderRadius: "20px",
+  // glass effect
+  background: "rgba(255, 255, 255, 0.1)",
+  backdropFilter: "blur(12px) saturate(160%)",
+  WebkitBackdropFilter: "blur(12px) saturate(160%)",
+  boxShadow: "0 25px 45px rgba(0, 0, 0, 0.1)",
+  borderLeft: "1px solid rgba(255, 255, 255, 0.2)",
+  borderTop: "1px solid rgba(255, 255, 255, 0.2)",
+  color: "#fff",
 };
 
 const inputStyle = {
   display: "block",
   width: "100%",
-  marginBottom: "10px",
-  padding: "10px",
-  borderRadius: "5px",
-  border: "1px solid #ccc",
+  marginBottom: "14px",
+  padding: "12px",
+  borderRadius: "10px",
+  border: "1px solid rgba(255, 255, 255, 0.3)",
+  backgroundColor: "rgba(255, 255, 255, 0.2)",
   fontSize: "16px",
+  outline: "none",
+  transition: "all 0.3s ease",
+  fontFamily: "'Lora', serif",
+  color: "#fff",
+  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+
+  "&:focus": {
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    borderColor: "rgba(255, 255, 255, 0.5)",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+  },
+
+  "&::placeholder": {
+    color: "rgba(255, 255, 255, 0.7)",
+  },
 };
 
 const buttonStyle = {
   width: "100%",
-  padding: "10px",
-  backgroundColor: "#4f46e5",
+  padding: "12px",
+  backgroundColor: "rgba(125, 90, 80, 0.7)",
   color: "#fff",
-  border: "none",
-  borderRadius: "5px",
+  border: "1px solid rgba(255, 255, 255, 0.2)",
+  borderRadius: "10px",
   cursor: "pointer",
   fontSize: "16px",
+  fontWeight: "bold",
+  transition: "all 0.3s ease",
+  letterSpacing: "0.5px",
+  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+  backdropFilter: "blur(5px)",
+
+  "&:hover": {
+    backgroundColor: "rgba(125, 90, 80, 0.9)",
+    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.3)",
+    transform: "translateY(-1px)",
+  },
+
+  "&:active": {
+    transform: "translateY(0)",
+  },
+};
+
+const googleButtonStyle = {
+  ...buttonStyle,
+  backgroundColor: "#DB4437",
+  marginTop: "10px",
 };
 
 const toggleButtonStyle = {
@@ -284,7 +340,7 @@ const toggleButtonStyle = {
   transform: "translateY(-50%)",
   background: "none",
   border: "none",
-  color: "#4f46e5",
+  color: "#5C4033",
   cursor: "pointer",
   fontWeight: "bold",
   padding: 0,
@@ -293,13 +349,19 @@ const toggleButtonStyle = {
 
 const checklistStyle = {
   listStyle: "none",
-  paddingLeft: 0,
+  paddingLeft: "10px",
   marginBottom: "15px",
   fontSize: "14px",
+  lineHeight: "1.6",
+  color: "#555",
 };
 
 const strengthContainer = {
   marginBottom: "10px",
+  backgroundColor: "rgba(255, 255, 255, 0.5)",
+  borderRadius: "5px",
+  padding: "5px 10px",
+  boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)",
 };
 
 export default App;

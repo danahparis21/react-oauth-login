@@ -1,8 +1,19 @@
 #root {
-  max-width: 1280px;
+
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -39,4 +50,44 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.animated-bg {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Lora', serif;
+  background: radial-gradient(
+    ellipse at center,
+    #6b4f3b 0%,
+    #8b7e74 30%,
+    #5c5148 60%,
+    #92877d 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientMove 100s ease infinite;
+  overflow: hidden;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+input:focus {
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3);
+}
+.animated-bg {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
