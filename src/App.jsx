@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import { account } from "./appwriteConfig";
 import { ID } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import emailjs from "emailjs-com";
 import "./App.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 emailjs.init(import.meta.env.VITE_EMAILJS_USER_ID);
 
 function App() {
+  const formRef = useRef(null);
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,9 +34,9 @@ function App() {
     if (hasNumber) score++;
 
     if (score === 0) return { label: "", color: "transparent" };
-    if (score === 1) return { label: "Weak", color: "red" };
-    if (score === 2) return { label: "Medium", color: "orange" };
-    if (score === 3) return { label: "Strong", color: "green" };
+    if (score === 1) return { label: "Weak", color: "#d3825c" }; // muted rust
+    if (score === 2) return { label: "Medium", color: "#e0b96a" }; // soft gold
+    if (score === 3) return { label: "Strong", color: "#f5e6c5" }; // light champagne
   };
 
   const navigate = useNavigate();
@@ -40,10 +45,19 @@ function App() {
     e.preventDefault();
 
     const { label } = getStrength();
-    if (label !== "Strong") return alert("Password is not strong enough");
-    if (!passwordMatch) return alert("Passwords do not match");
-    if (!username.trim()) return alert("Please enter a username");
-    if (!email.trim()) return alert("Please enter an email address");
+    if (label !== "Strong")
+      return toast.warning("Password is not strong enough", {
+        className: "custom-toast"
+     });
+    if (!passwordMatch) return toast.error("Passwords do not match", {
+      className: "custom-toast"
+   });
+    if (!username.trim()) return toast.info("Please enter a username", {
+      className: "custom-toast"
+   });
+    if (!email.trim()) return toast.info("Please enter an email address", {
+      className: "custom-toast"
+   });
 
     try {
       // ✅ Create the user account
@@ -54,75 +68,88 @@ function App() {
         username.trim()
       );
       console.log("User created:", res);
-      alert("Account created successfully!");
+      toast.success("Account created successfully!", {
+        className: "custom-toast"
+     });
 
       await account.createEmailPasswordSession(email, password);
       console.log("User session created.");
 
       await account.createVerification("http://localhost:5173/welcome");
-      alert("A verification email has been sent. Please check your inbox!");
+      toast.success("Verification email sent! Please check your inbox.", {
+        className: "custom-toast"
+     });
 
       navigate("/welcome");
     } catch (err) {
       if (err.code === 429) {
-        alert("Too many requests. Please wait a minute and try again.");
+        toast.warning("Too many requests. Please wait a minute.", {
+          className: "custom-toast"
+       });
       } else if (err.code === 409) {
-        alert("User already exists. Try logging in.");
+        toast.error("User already exists. Try logging in.", {
+          className: "custom-toast"
+       });
       } else {
         console.error("Appwrite signup error:", err);
-        alert(err.message || "Signup failed");
+        toast.error("User already exists. Try logging in.", {
+           className: "custom-toast"
+        });
+        
       }
     }
   };
 
-  // useEffect(() => {
-  //   const checkUser = async () => {
-  //     try {
-  //       const user = await account.get();
-  //       if (user) {
-  //         navigate("/welcome");
-  //       }
-  //     } catch (err) {
-  //       console.log("Not logged in");
-  //     }
-  //   };
+  useEffect(() => {
+    const el = formRef.current;
 
-  //   checkUser();
-  // }, []);
+    const handleMouseMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      el.style.setProperty("--x", `${x}px`);
+      el.style.setProperty("--y", `${y}px`);
+    };
+
+    el.addEventListener("mousemove", handleMouseMove);
+    return () => el.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+ 
 
   return (
     <div style={containerStyle} className="animated-bg">
+       <ToastContainer
+    position="top-center"
+    autoClose={3500}
+    hideProgressBar={false}
+    newestOnTop={true}
+    closeOnClick
+    pauseOnHover
+    draggable
+    theme="dark"
+  />
       <div
         className="glass-circle"
         style={{
-          position: "absolute",
-          width: "200px",
-          height: "200px",
-          borderRadius: "50%",
-          background: "rgba(255, 255, 255, 0.05)",
-          backdropFilter: "blur(10px)",
-          top: "20%",
+          width: "220px",
+          height: "220px",
+          top: "10%",
           left: "10%",
-          zIndex: 0,
         }}
       ></div>
 
       <div
         className="glass-circle"
         style={{
-          position: "absolute",
-          width: "300px",
-          height: "300px",
-          borderRadius: "50%",
-          background: "rgba(255, 255, 255, 0.03)",
-          backdropFilter: "blur(15px)",
-          bottom: "10%",
-          right: "15%",
-          zIndex: 0,
+          width: "320px",
+          height: "320px",
+          bottom: "5%",
+          right: "10%",
         }}
       ></div>
 
-      <div style={formWrapperStyle}>
+      <div className="form-wrapper" ref={formRef}>
         <h2
           style={{
             textAlign: "center",
@@ -176,10 +203,11 @@ function App() {
             <div style={strengthContainer}>
               <div
                 style={{
-                  height: "8px",
+                  height: "6px",
                   borderRadius: "4px",
                   backgroundColor: getStrength().color,
-                  transition: "all 0.3s ease",
+                  width: "100%",
+                  transition: "all 0.4s ease",
                 }}
               ></div>
               <span
@@ -206,34 +234,35 @@ function App() {
           {/* Password checklist */}
           {touched && (
             <ul style={checklistStyle}>
-              <li style={{ color: isLongEnough ? "green" : "#f79862" }}>
+              <li style={{ color: isLongEnough ? "white" : "#f79862" }}>
                 {isLongEnough ? "✓" : "✗"} At least 8 characters
               </li>
-              <li style={{ color: hasUppercase ? "green" : "#f79862" }}>
+              <li style={{ color: hasUppercase ? "white" : "#f79862" }}>
                 {hasUppercase ? "✓" : "✗"} At least one uppercase letter
               </li>
-              <li style={{ color: hasNumber ? "green" : "#f79862" }}>
+              <li style={{ color: hasNumber ? "white" : "#f79862" }}>
                 {hasNumber ? "✓" : "✗"} At least one number
               </li>
             </ul>
           )}
 
-          <button type="submit" style={buttonStyle}>
+          <button type="submit" className="signup-btn">
             Sign Up
           </button>
           <button
             type="button"
-            onClick={() =>
-              account.createOAuth2Session(
-                "google",
-                "http://localhost:5173/welcome", // Redirect on success
-                "http://localhost:5173/" // Redirect on failure
-              )
-            }
-            style={{
-              ...buttonStyle,
-              backgroundColor: "#DB4437",
-              marginTop: "10px",
+            className="google-btn"
+            onClick={async () => {
+              try {
+                await account.createOAuth2Session(
+                  "google",
+                  "http://localhost:5173/welcome", // success
+                  "http://localhost:5173/welcome" // failure fallback too // failure page
+                );
+              } catch (err) {
+                console.error("OAuth login failed:", err);
+                alert("Google Sign-In failed. Please try again.");
+              }
             }}
           >
             Sign in with Google
@@ -255,9 +284,9 @@ const containerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  background: "linear-gradient(-45deg, #6b4f3b, #8b7e74, #5c5148, #92877d)",
-  backgroundSize: "400% 400%",
   fontFamily: "'Lora', serif",
+  position: "relative", // to hold glass circles properly
+  overflow: "hidden",
 };
 
 const formWrapperStyle = {
@@ -265,14 +294,19 @@ const formWrapperStyle = {
   maxWidth: "420px",
   padding: "30px",
   borderRadius: "20px",
-  // glass effect
-  background: "rgba(255, 255, 255, 0.1)",
+  background: "rgba(255, 255, 255, 0.08)",
   backdropFilter: "blur(12px) saturate(160%)",
   WebkitBackdropFilter: "blur(12px) saturate(160%)",
-  boxShadow: "0 25px 45px rgba(0, 0, 0, 0.1)",
-  borderLeft: "1px solid rgba(255, 255, 255, 0.2)",
-  borderTop: "1px solid rgba(255, 255, 255, 0.2)",
+  boxShadow: `
+    0 0 20px rgba(255, 255, 255, 0.15),   /* soft white glow */
+    0 4px 30px rgba(0, 0, 0, 0.3),        /* depth shadow */
+    inset 0 1px 2px rgba(255, 255, 255, 0.2), /* inner top light */
+    inset 0 -1px 2px rgba(0, 0, 0, 0.2)       /* inner bottom dark */
+  `,
+  borderLeft: "1px solid rgba(255, 255, 255, 0.18)",
   color: "#fff",
+  position: "relative",
+  zIndex: 1,
 };
 
 const inputStyle = {
@@ -281,55 +315,55 @@ const inputStyle = {
   marginBottom: "14px",
   padding: "12px",
   borderRadius: "10px",
-  border: "1px solid rgba(255, 255, 255, 0.3)",
-  backgroundColor: "rgba(255, 255, 255, 0.2)",
+  border: "1px solid rgba(255, 255, 255, 0.25)",
+  backgroundColor: "rgba(255, 255, 255, 0.08)",
   fontSize: "16px",
-  outline: "none",
+  color: "#ffffff",
   transition: "all 0.3s ease",
   fontFamily: "'Lora', serif",
-  color: "#fff",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  backdropFilter: "blur(6px)",
 
-  "&:focus": {
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
-    borderColor: "rgba(255, 255, 255, 0.5)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+  // Hover
+
+  // Focus
+  ":focus": {
+    outline: "none",
+    boxShadow: "0 0 8px rgba(210, 181, 117, 0.4)",
   },
 
-  "&::placeholder": {
-    color: "rgba(255, 255, 255, 0.7)",
+  // Placeholder
+  "::placeholder": {
+    color: "#fffff",
   },
 };
 
 const buttonStyle = {
   width: "100%",
   padding: "12px",
-  backgroundColor: "rgba(125, 90, 80, 0.7)",
+  backgroundColor: "#a87740",
   color: "#fff",
   border: "1px solid rgba(255, 255, 255, 0.2)",
   borderRadius: "10px",
   cursor: "pointer",
   fontSize: "16px",
   fontWeight: "bold",
-  transition: "all 0.3s ease",
   letterSpacing: "0.5px",
-  boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
-  backdropFilter: "blur(5px)",
+  transition: "all 0.3s ease-in-out",
+  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
 
-  "&:hover": {
-    backgroundColor: "rgba(125, 90, 80, 0.9)",
-    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.3)",
-    transform: "translateY(-1px)",
+  ":hover": {
+    backgroundColor: "#c38e57",
+    boxShadow: "0 0 12px rgba(255, 193, 107, 0.4)",
   },
 
-  "&:active": {
-    transform: "translateY(0)",
+  ":active": {
+    transform: "scale(0.98)",
   },
 };
 
 const googleButtonStyle = {
   ...buttonStyle,
-  backgroundColor: "#DB4437",
+  backgroundColor: "#474640",
   marginTop: "10px",
 };
 
@@ -349,19 +383,28 @@ const toggleButtonStyle = {
 
 const checklistStyle = {
   listStyle: "none",
-  paddingLeft: "10px",
-  marginBottom: "15px",
-  fontSize: "14px",
-  lineHeight: "1.6",
-  color: "#555",
+  padding: "10px 0",
+  margin: "0",
+  fontSize: "13px",
+  lineHeight: "1.8",
+  color: "#eee",
+  fontFamily: "'Lora', serif",
 };
 
+const checkItem = (isMet) => ({
+  color: isMet ? "#bfa16a" : "#d48b5c",
+  fontWeight: isMet ? "500" : "400",
+});
+
 const strengthContainer = {
-  marginBottom: "10px",
-  backgroundColor: "rgba(255, 255, 255, 0.5)",
-  borderRadius: "5px",
-  padding: "5px 10px",
-  boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)",
+  marginBottom: "12px",
+  padding: "6px 12px",
+  background: "rgba(255, 255, 255, 0.06)",
+  borderRadius: "8px",
+  backdropFilter: "blur(6px)",
+  color: "#fff",
+  fontSize: "12px",
+  border: "1px solid rgba(255, 255, 255, 0.2)",
 };
 
 export default App;

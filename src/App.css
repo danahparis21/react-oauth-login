@@ -52,42 +52,191 @@ body,
   color: #888;
 }
 
+/* BACKGROUND */
 .animated-bg {
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Lora', serif;
-  background: radial-gradient(
-    ellipse at center,
-    #6b4f3b 0%,
-    #8b7e74 30%,
-    #5c5148 60%,
-    #92877d 100%
+  background: linear-gradient(135deg,
+    
+    #c37449,
+   
+    #140a09,
+    #150b0a,
+    #150b0a,
+    #4d361c,
+    #57381d,
+    #c37449,
+    #d2b575,
+    #150b0a
   );
-  background-size: 200% 200%;
-  animation: gradientMove 100s ease infinite;
+  background-size: 150% 150%;
+  filter: blur(0px);
+  position: relative;
   overflow: hidden;
 }
 
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+/* GLOWING BLURRED CIRCLES */
+.glass-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 80px rgba(255, 255, 255, 0.08),
+            0 0 180px rgba(255, 255, 255, 0.06);
+
+  z-index: 0;
 }
 
 input:focus {
   box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3);
 }
-.animated-bg {
+
+.form-wrapper {
+  width: 100%;
+  max-width: 420px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+.form-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  background: radial-gradient(
+    500px circle at var(--x, 50%) var(--y, 50%),
+    rgba(241, 138, 13, 0.3),
+    transparent 80%
+  );
+  transition: background 0.15s ease;
+  z-index: 0;
+}
+
+
+.form-wrapper:hover {
+  box-shadow:
+    0 0 20px rgba(229, 158, 5, 0.416),  /* soft golden outer glow */
+    0 8px 40px rgba(88, 47, 11, 0.3),    /* warm depth shadow */
+    inset 0 2px 4px rgba(255, 255, 255, 0.15), /* inner glow top */
+    inset 0 -2px 4px rgba(87, 56, 29, 0.176);   /* inner shadow bottom */
+}
+
+
+.form-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+  filter: blur(60px);
+  z-index: 0;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.7); /* Not pure white, just a soft readable white */
+}
+
+input:focus::placeholder {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+inputhover{
+
+    background: "rgba(255, 255, 255, 0.12)",
+  
+}
+
+.signup-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #a87740;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.signup-btn:hover {
+  outline: none;
+  background-color: #734e27;
+  box-shadow: 0 0 12px rgba(255, 193, 107, 0.4);
+}
+
+.signup-btn:active {
+  transform: scale(0.98);
+}
+
+
+/* Google button */
+.google-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #474640;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
+}
+
+.google-btn:hover {
+  background-color: #2f2d20;
+  box-shadow: 0 0 12px rgba(200, 200, 200, 0.3);
+}
+
+.google-btn:active {
+  transform: scale(0.98);
+}
+
+/* .animated-bg {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
+} */
+
+.signup-btn:focus,
+.signup-btn:focus-visible,
+.google-btn:focus,
+.google-btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 193, 107, 0.4) !important;
+}
+
+/* in your global CSS or component CSS file */
+.custom-toast {
+  background-color: #4d361c !important;
+  color: #fff !important;
+  border-radius: 10px;
+  font-family: 'Lora', serif;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }

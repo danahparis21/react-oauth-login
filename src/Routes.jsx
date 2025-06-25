@@ -5,6 +5,7 @@ import Login from "./Login";
 import Welcome from "./Welcome";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
+import OAuthError from "./OAuthError"; 
 
 function AppRoutes() {
   return (
@@ -15,6 +16,8 @@ function AppRoutes() {
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset" element={<ResetPassword />} />
+        <Route path="/oauth-error" element={<OAuthError />} />
+
       </Routes>
     </Router>
   );

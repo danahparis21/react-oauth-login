@@ -35,6 +35,16 @@ function Welcome() {
         console.log("👤 User fetched:", user);
         console.log("🔍 Email verified?", user.emailVerification);
 
+        if (!localStorage.getItem(`greeted:${user.$id}`)) {
+          const isNewUser = !localStorage.getItem(`welcomeSent:${user.$id}`);
+          const message = isNewUser
+            ? `Welcome${user.name ? `, ${user.name}` : ""}!`
+            : `Welcome back${user.name ? `, ${user.name}` : ""}!`;
+          alert(message);
+          console.log("User exists");
+          localStorage.setItem(`greeted:${user.$id}`, "true");
+        }
+        
       
         if (
           user.emailVerification &&
