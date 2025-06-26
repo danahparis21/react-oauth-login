@@ -1,77 +1,122 @@
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { account } from "./appwriteConfig";
+import { Link } from "react-router-dom";
+import "./App.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 function ForgotPassword() {
+  const formRef = useRef(null);
   const [email, setEmail] = useState("");
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await account.createRecovery(email, "http://localhost:5173/reset");
-      alert("Recovery email sent! Check your inbox.");
+    
+      toast.success("If an account with that email exists, a recovery link has been sent.", {
+        className: "custom-toast",
+      });
+
     } catch (err) {
       console.error("Recovery error:", err);
-      alert(err.message || "Something went wrong");
+      toast.error(err.message || "Something went wrong", {
+        className: "custom-toast",
+      });
     }
   };
 
+  useEffect(() => {
+    const el = formRef.current;
+
+    const handleMouseMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      el.style.setProperty("--x", `${x}px`);
+      el.style.setProperty("--y", `${y}px`);
+    };
+
+    el.addEventListener("mousemove", handleMouseMove);
+    return () => el.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+  
+
+
   return (
-    <div style={containerStyle}>
-      <form onSubmit={handleSubmit} style={formStyle}>
-        <h2>Forgot Password</h2>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={inputStyle}
-        />
-        <button type="submit" style={buttonStyle}>
-          Send Recovery Email
-        </button>
-      </form>
+    <div className="animated-bg">
+      <div className="glass-circle" style={{ width: "220px", height: "220px", top: "10%", left: "10%" }}></div>
+      <div className="glass-circle" style={{ width: "320px", height: "320px", bottom: "5%", right: "10%" }}></div>
+  
+      <div className="form-wrapper" ref={formRef}>
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Forgot Password</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="input-field"
+            style={inputStyle}
+          />
+  
+          <button type="submit" className="forgotPass-signup-btn">
+            Send Recovery Email
+          </button>
+  
+          <p style={{ textAlign: "center", marginTop: "10px" }}>
+            <Link to="/login" style={{ color: "#d2b575", textDecoration: "none" }}>
+              Back to Login
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
+  
 }
 
+
+
+
 const containerStyle = {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f9fafb",
-  };
-  
-  const formStyle = {
-    width: "100%",
-    maxWidth: "400px",
-    background: "#fff",
-    padding: "30px",
-    borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    textAlign: "center"
-  };
-  
-  const inputStyle = {
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-  };
-  
-  const buttonStyle = {
-    width: "100%",
-    padding: "10px",
-    backgroundColor: "#4f46e5",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "16px",
-    cursor: "pointer",
-  };
-  
+  height: "100vh",
+  width: "100vw",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontFamily: "'Open Sans', sans-serif",
+  position: "relative",
+  overflow: "hidden",
+};
+
+const inputStyle = {
+  display: "block",
+  width: "100%",
+  marginBottom: "14px",
+  padding: "12px",
+  borderRadius: "10px",
+  border: "1px solid rgba(255, 255, 255, 0.25)",
+  backgroundColor: "rgba(255, 255, 255, 0.08)",
+  fontSize: "16px",
+  color: "#ffffff",
+  transition: "all 0.3s ease",
+  fontFamily: "'Open Sans', sans-serif",
+  backdropFilter: "blur(6px)",
+};
+
+const headingStyle = {
+  textAlign: "center",
+  marginBottom: "20px",
+  color: "#fff",
+  textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+};
+
+
+
+
 
 export default ForgotPassword;

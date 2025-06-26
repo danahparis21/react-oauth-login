@@ -218,6 +218,33 @@ inputhover{
   transform: scale(0.98);
 }
 
+
+.forgotPass-signup-btn {
+  width: 80%;
+  padding: 12px;
+  background-color: #a87740;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.signup-btn:hover {
+  outline: none;
+  background-color: #734e27;
+  box-shadow: 0 0 12px rgba(255, 193, 107, 0.4);
+}
+
+.signup-btn:active {
+  transform: scale(0.98);
+}
+
+
 /* .animated-bg {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;

@@ -11,10 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 function Login() {
   const formRef = useRef(null);
 
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ function Login() {
       navigate("/welcome");
     } catch (err) {
       console.error("Login error:", err);
-  
+
       if (err.code === 429) {
         toast.warning("Too many requests. Please wait a minute.", {
           className: "custom-toast",
@@ -50,7 +50,6 @@ function Login() {
       }
     }
   };
-  
 
   useEffect(() => {
     const el = formRef.current;
@@ -66,7 +65,6 @@ function Login() {
     el.addEventListener("mousemove", handleMouseMove);
     return () => el.removeEventListener("mousemove", handleMouseMove);
   }, []);
-  
 
   return (
     <div style={containerStyle} className="animated-bg">
@@ -81,11 +79,16 @@ function Login() {
         theme="dark"
       />
 
-      <div className="glass-circle" style={{ width: "220px", height: "220px", top: "10%", left: "10%" }}></div>
-      <div className="glass-circle" style={{ width: "320px", height: "320px", bottom: "5%", right: "10%" }}></div>
+      <div
+        className="glass-circle"
+        style={{ width: "220px", height: "220px", top: "10%", left: "10%" }}
+      ></div>
+      <div
+        className="glass-circle"
+        style={{ width: "320px", height: "320px", bottom: "5%", right: "10%" }}
+      ></div>
 
       <div className="form-wrapper" ref={formRef}>
-
         <h2 style={headingStyle}>Log In</h2>
         <form onSubmit={handleLogin}>
           <input
@@ -96,22 +99,39 @@ function Login() {
             required
             style={inputStyle}
           />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={inputStyle}
-          />
+          <div style={{ position: "relative" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{
+                ...inputStyle,
+                paddingRight: "80px", // Give room for the button inside the input
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              style={toggleButtonStyle}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
 
           <p style={{ textAlign: "center", marginTop: "10px" }}>
-            <Link to="/forgot-password" style={{ color: "#d2b575", textDecoration: "none" }}>
+            <Link
+              to="/forgot-password"
+              style={{ color: "#d2b575", textDecoration: "none" }}
+            >
               Forgot Password?
             </Link>
           </p>
 
-          <button type="submit" className="signup-btn">Log In</button>
+          <button type="submit" className="signup-btn">
+            Log In
+          </button>
 
           <button
             type="button"
@@ -172,8 +192,6 @@ const headingStyle = {
   textShadow: "0 2px 4px rgba(0,0,0,0.2)",
 };
 
-
-
 const toggleButtonStyle = {
   position: "absolute",
   right: "10px",
@@ -187,7 +205,5 @@ const toggleButtonStyle = {
   padding: 0,
   fontSize: "14px",
 };
-
-
 
 export default Login;
