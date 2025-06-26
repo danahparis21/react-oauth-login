@@ -3,15 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { account } from "./appwriteConfig";
 import emailjs from "emailjs-com";
 import { useRef } from "react";
+import './Welcome.css';
 
 emailjs.init(import.meta.env.VITE_EMAILJS_USER_ID);
 
-
-
-
-
 function Welcome() {
   const [user, setUser] = useState(null);
+  const [cardRevealed, setCardRevealed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const hasSent = useRef(false);
@@ -40,12 +38,10 @@ function Welcome() {
           const message = isNewUser
             ? `Welcome${user.name ? `, ${user.name}` : ""}!`
             : `Welcome back${user.name ? `, ${user.name}` : ""}!`;
-          alert(message);
           console.log("User exists");
           localStorage.setItem(`greeted:${user.$id}`, "true");
         }
-        
-      
+
         if (
           user.emailVerification &&
           !localStorage.getItem(`welcomeSent:${user.$id}`) &&
@@ -66,8 +62,11 @@ function Welcome() {
 
           console.log("✅ Welcome Email Sent to verified user");
           localStorage.setItem(`welcomeSent:${user.$id}`, "true");
-
         }
+
+        // Trigger card reveal after envelope animation
+        setTimeout(() => setCardRevealed(true), 1500);
+
       } catch (err) {
         console.error("Not logged in or verification failed:", err);
         navigate("/login");
@@ -79,41 +78,43 @@ function Welcome() {
 
   const handleLogout = async () => {
     await account.deleteSessions();
-    localStorage.removeItem("welcomeSent"); 
-    navigate("/");
+    localStorage.removeItem("welcomeSent");
+    navigate("/login");
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
+    <div className="welcome-page">
       {user ? (
         <>
-          <h1>Welcome, {user.name || user.email}!</h1>
-          {user.emailVerification ? (
-            <p style={{ color: "green" }}>
-              ✅ Your account is verified! You may now log in.
-            </p>
-          ) : (
-            <p style={{ color: "orange" }}>
-              📨 Please check your email to verify your account before logging
-              in again.
-            </p>
+          <div className="envelope-container">
+            <div className="envelope">
+              <div className="envelope-front"></div>
+              <div className="envelope-back"></div>
+              <div className="envelope-flap"></div>
+            </div>
+          </div>
+
+          {cardRevealed && (
+            <div className="glow-card">
+              <h1>Welcome, {user.name || user.email}!</h1>
+              {user.emailVerification ? (
+                <p>🎉 Congrats! Your account has been verified.</p>
+              ) : (
+                <p>📨 Please check your email to verify your account.</p>
+              )}
+            </div>
           )}
 
-          <div style={{ marginTop: "20px" }}>
-            <button onClick={handleLogout} style={buttonStyle}>
-              Log Out
-            </button>
-            <button
-              onClick={() => navigate("/")}
-              style={{
-                ...buttonStyle,
-                marginLeft: "10px",
-                backgroundColor: "#4f46e5",
-              }}
-            >
-              Go to Sign Up
-            </button>
-          </div>
+          {cardRevealed && (
+            <div className="action-buttons">
+              <button className="welcome-logout-btn" onClick={handleLogout}>
+                Log Out
+              </button>
+              <button className="welcome-signup-btn" onClick={() => navigate("/")}>
+                Go to Sign Up
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <h1>Loading...</h1>
@@ -121,15 +122,5 @@ function Welcome() {
     </div>
   );
 }
-
-const buttonStyle = {
-  padding: "10px 20px",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-  fontSize: "16px",
-  backgroundColor: "#e11d48",
-  color: "#fff",
-};
 
 export default Welcome;

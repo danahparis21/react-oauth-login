@@ -47,17 +47,20 @@ function App() {
     const { label } = getStrength();
     if (label !== "Strong")
       return toast.warning("Password is not strong enough", {
-        className: "custom-toast"
-     });
-    if (!passwordMatch) return toast.error("Passwords do not match", {
-      className: "custom-toast"
-   });
-    if (!username.trim()) return toast.info("Please enter a username", {
-      className: "custom-toast"
-   });
-    if (!email.trim()) return toast.info("Please enter an email address", {
-      className: "custom-toast"
-   });
+        className: "custom-toast",
+      });
+    if (!passwordMatch)
+      return toast.error("Passwords do not match", {
+        className: "custom-toast",
+      });
+    if (!username.trim())
+      return toast.info("Please enter a username", {
+        className: "custom-toast",
+      });
+    if (!email.trim())
+      return toast.info("Please enter an email address", {
+        className: "custom-toast",
+      });
 
     try {
       // ✅ Create the user account
@@ -69,33 +72,32 @@ function App() {
       );
       console.log("User created:", res);
       toast.success("Account created successfully!", {
-        className: "custom-toast"
-     });
+        className: "custom-toast",
+      });
 
       await account.createEmailPasswordSession(email, password);
       console.log("User session created.");
 
       await account.createVerification("http://localhost:5173/welcome");
       toast.success("Verification email sent! Please check your inbox.", {
-        className: "custom-toast"
-     });
+        className: "custom-toast",
+      });
 
       navigate("/welcome");
     } catch (err) {
       if (err.code === 429) {
         toast.warning("Too many requests. Please wait a minute.", {
-          className: "custom-toast"
-       });
+          className: "custom-toast",
+        });
       } else if (err.code === 409) {
         toast.error("User already exists. Try logging in.", {
-          className: "custom-toast"
-       });
+          className: "custom-toast",
+        });
       } else {
         console.error("Appwrite signup error:", err);
         toast.error("User already exists. Try logging in.", {
-           className: "custom-toast"
+          className: "custom-toast",
         });
-        
       }
     }
   };
@@ -115,20 +117,18 @@ function App() {
     return () => el.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
- 
-
   return (
     <div style={containerStyle} className="animated-bg">
-       <ToastContainer
-    position="top-center"
-    autoClose={3500}
-    hideProgressBar={false}
-    newestOnTop={true}
-    closeOnClick
-    pauseOnHover
-    draggable
-    theme="dark"
-  />
+      <ToastContainer
+        position="top-center"
+        autoClose={3500}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+      />
       <div
         className="glass-circle"
         style={{
@@ -269,7 +269,13 @@ function App() {
           </button>
 
           <p style={{ textAlign: "center", marginTop: "10px" }}>
-            Already have an account? <Link to="/login">Log In</Link>
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              style={{ color: "#d2b575", textDecoration: "none" }}
+            >
+              Log In
+            </Link>
           </p>
         </form>
       </div>
@@ -284,30 +290,13 @@ const containerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  fontFamily: "'Lora', serif",
+  fontFamily: "'Open Sans', sans-serif",
+
   position: "relative", // to hold glass circles properly
   overflow: "hidden",
 };
 
-const formWrapperStyle = {
-  width: "100%",
-  maxWidth: "420px",
-  padding: "30px",
-  borderRadius: "20px",
-  background: "rgba(255, 255, 255, 0.08)",
-  backdropFilter: "blur(12px) saturate(160%)",
-  WebkitBackdropFilter: "blur(12px) saturate(160%)",
-  boxShadow: `
-    0 0 20px rgba(255, 255, 255, 0.15),   /* soft white glow */
-    0 4px 30px rgba(0, 0, 0, 0.3),        /* depth shadow */
-    inset 0 1px 2px rgba(255, 255, 255, 0.2), /* inner top light */
-    inset 0 -1px 2px rgba(0, 0, 0, 0.2)       /* inner bottom dark */
-  `,
-  borderLeft: "1px solid rgba(255, 255, 255, 0.18)",
-  color: "#fff",
-  position: "relative",
-  zIndex: 1,
-};
+
 
 const inputStyle = {
   display: "block",
@@ -320,7 +309,7 @@ const inputStyle = {
   fontSize: "16px",
   color: "#ffffff",
   transition: "all 0.3s ease",
-  fontFamily: "'Lora', serif",
+  fontFamily: "'Open Sans', sans-serif",
   backdropFilter: "blur(6px)",
 
   // Hover
@@ -361,12 +350,6 @@ const buttonStyle = {
   },
 };
 
-const googleButtonStyle = {
-  ...buttonStyle,
-  backgroundColor: "#474640",
-  marginTop: "10px",
-};
-
 const toggleButtonStyle = {
   position: "absolute",
   right: "10px",
@@ -374,7 +357,7 @@ const toggleButtonStyle = {
   transform: "translateY(-50%)",
   background: "none",
   border: "none",
-  color: "#5C4033",
+  color: "#d2b575",
   cursor: "pointer",
   fontWeight: "bold",
   padding: 0,
@@ -388,7 +371,7 @@ const checklistStyle = {
   fontSize: "13px",
   lineHeight: "1.8",
   color: "#eee",
-  fontFamily: "'Lora', serif",
+  fontFamily: "'Open Sans', sans-serif",
 };
 
 const checkItem = (isMet) => ({
@@ -407,4 +390,31 @@ const strengthContainer = {
   border: "1px solid rgba(255, 255, 255, 0.2)",
 };
 
+
+// const googleButtonStyle = {
+//   ...buttonStyle,
+//   backgroundColor: "#474640",
+//   marginTop: "10px",
+// };
+
+
+// const formWrapperStyle = {
+//   width: "100%",
+//   maxWidth: "420px",
+//   padding: "30px",
+//   borderRadius: "20px",
+//   background: "rgba(255, 255, 255, 0.08)",
+//   backdropFilter: "blur(12px) saturate(160%)",
+//   WebkitBackdropFilter: "blur(12px) saturate(160%)",
+//   boxShadow: `
+//     0 0 20px rgba(255, 255, 255, 0.15),   /* soft white glow */
+//     0 4px 30px rgba(0, 0, 0, 0.3),        /* depth shadow */
+//     inset 0 1px 2px rgba(255, 255, 255, 0.2), /* inner top light */
+//     inset 0 -1px 2px rgba(0, 0, 0, 0.2)       /* inner bottom dark */
+//   `,
+//   borderLeft: "1px solid rgba(255, 255, 255, 0.18)",
+//   color: "#fff",
+//   position: "relative",
+//   zIndex: 1,
+// };
 export default App;

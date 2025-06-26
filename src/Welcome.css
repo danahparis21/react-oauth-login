@@ -1,0 +1,250 @@
+/* Welcome.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+.welcome-page {
+  background-color: #0b0b0b;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+.envelope-container {
+  position: absolute;
+  width: 800px;
+  height: 300px;
+  perspective: 1000px;
+  z-index: 10; /* Higher than card */
+  top: 58%; /* Positioned slightly above center */
+}
+
+.envelope {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: envelopeOpen 1.5s ease-in-out forwards;
+}
+
+.envelope-front, .envelope-back, .envelope-flap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #684207, #282012);
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(91, 60, 2, 0.1);
+}
+
+.envelope-front {
+  transform: translateZ(1px);
+  z-index: 2;
+}
+
+.envelope-back {
+  transform: rotateX(0deg) translateZ(-1px);
+  z-index: 1;
+}
+
+.envelope-flap {
+  transform-origin: top;
+  transform: rotateX(0deg);
+  z-index: 3;
+  background: linear-gradient(145deg, #a77312, #d19814);
+  border-radius: 5px 5px 0 0;
+  height: 40%;
+}
+
+@keyframes envelopeOpen {
+  0% {
+    transform: translateY(0) rotateX(0);
+  }
+  40% {
+    transform: translateY(-30px) rotateX(0);
+  }
+  60% {
+    transform: translateY(-30px) rotateX(-180deg);
+  }
+  100% {
+    transform: translateY(-30px) rotateX(-180deg);
+  }
+}
+
+.glow-card {
+  background: linear-gradient(145deg, #ffe710, #ff8800);
+  color: #1c1207;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(255, 165, 0, 0.8),
+              0 0 60px rgba(255, 165, 0, 0.4),
+              0 0 90px rgba(255, 165, 0, 0.2);
+  text-align: center;
+  animation: cardReveal 1.2s ease-out forwards, 
+             pulseGlow 2s infinite alternate;
+  opacity: 0;
+  max-width: 80%;
+  position: relative;
+  overflow: hidden;
+  z-index: 5; /* Lower than envelope */
+  margin-top: -60px; /* Pull card up closer to envelope */
+  width: 700px; /* Wider card */
+}
+
+@keyframes cardReveal {
+  0% {
+    transform: translateY(80px) scale(0.9);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.glow-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  transform: rotate(30deg);
+  animation: shine 3s infinite;
+  opacity: 0.3;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(30deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 30px rgba(255, 165, 0, 0.8),
+                0 0 60px rgba(255, 165, 0, 0.4),
+                0 0 90px rgba(255, 165, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 40px rgb(255, 171, 14),
+                0 0 80px rgba(255, 165, 0, 0.6),
+                0 0 120px rgba(255, 165, 0, 0.3);
+  }
+}
+
+.action-buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  animation: fadeIn 0.8s ease-out forwards;
+  opacity: 0;
+  z-index: 20; /* Below both envelope and card */
+  position: relative;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.action-buttons button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 180px;
+  text-align: center;
+}
+
+.action-buttons button:hover {
+  transform: translateY(-3px);
+}
+
+.action-buttons button:active {
+  transform: translateY(1px);
+}
+
+.welcome-logout-btn {
+  background-color:  rgba(220, 96, 14, 0.2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(209, 144, 6, 0.4);
+}
+
+.welcome-logout-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(201, 59, 59, 0.833), transparent);
+  transition: 0.5s;
+}
+
+.welcome-logout-btn:hover::before {
+  left: 100%;
+}
+
+.welcome-signup-btn {
+  background-color: rgba(220, 96, 14, 0.2);
+  color: white;
+  box-shadow: 0 4px 15px  rgba(209, 144, 6, 0.4);
+}
+
+.welcome-signup-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent,#4f46e5, transparent);
+  transition: 0.5s;
+}
+
+.welcome-signup-btn:hover::before {
+  left: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .envelope-container {
+    width: 150px;
+    height: 90px;
+  }
+  
+  .glow-card {
+    padding: 20px;
+    max-width: 90%;
+    width: 250px;
+    margin-top: -40px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
