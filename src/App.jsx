@@ -78,7 +78,8 @@ function App() {
       await account.createEmailPasswordSession(email, password);
       console.log("User session created.");
 
-      await account.createVerification("http://localhost:5173/welcome");
+      await account.createVerification("https://react-auth-loginui.netlify.app/welcome");
+
       toast.success("Verification email sent! Please check your inbox.", {
         className: "custom-toast",
       });

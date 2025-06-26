@@ -14,7 +14,8 @@ function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await account.createRecovery(email, "http://localhost:5173/reset");
+      await account.createRecovery(email, "https://react-auth-loginui.netlify.app/reset");
+
       console.log("📨preparing to send email...");
       toast.success("If an account with that email exists, a recovery link has been sent.", {
         className: "custom-toast",
