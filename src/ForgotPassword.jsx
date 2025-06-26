@@ -15,7 +15,7 @@ function ForgotPassword() {
     e.preventDefault();
     try {
       await account.createRecovery(email, "http://localhost:5173/reset");
-    
+      console.log("📨preparing to send email...");
       toast.success("If an account with that email exists, a recovery link has been sent.", {
         className: "custom-toast",
       });
@@ -47,6 +47,16 @@ function ForgotPassword() {
 
   return (
     <div className="animated-bg">
+      <ToastContainer
+        position="top-center"
+        autoClose={3500}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+      />
       <div className="glass-circle" style={{ width: "220px", height: "220px", top: "10%", left: "10%" }}></div>
       <div className="glass-circle" style={{ width: "320px", height: "320px", bottom: "5%", right: "10%" }}></div>
   

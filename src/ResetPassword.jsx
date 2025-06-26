@@ -53,11 +53,16 @@ function ResetPassword() {
 
     try {
       await account.updateRecovery(userId, secret, password, confirm);
-      toast.success("Password reset successful!");
+      toast.success("Password updated Successfully!", {
+        className: "custom-toast",
+      });
       navigate("/login");
     } catch (err) {
       console.error("Reset error:", err);
-      toast.error(err.message || "Something went wrong");
+   
+      toast.error(err.message || "Something went wrong", {
+        className: "custom-toast",
+      });
     }
   };
 
