@@ -256,8 +256,8 @@ function App() {
               try {
                 await account.createOAuth2Session(
                   "google",
-                  "http://localhost:5173/welcome", // success
-                  "http://localhost:5173/welcome" // failure fallback too // failure page
+                  "https://react-auth-loginui.netlify.app/welcome", // ✅ success
+                  "https://react-auth-loginui.netlify.app/welcome" // ✅ failure fallback too // failure fallback too // failure page
                 );
               } catch (err) {
                 console.error("OAuth login failed:", err);
@@ -295,8 +295,6 @@ const containerStyle = {
   position: "relative", // to hold glass circles properly
   overflow: "hidden",
 };
-
-
 
 const inputStyle = {
   display: "block",
@@ -390,13 +388,11 @@ const strengthContainer = {
   border: "1px solid rgba(255, 255, 255, 0.2)",
 };
 
-
 // const googleButtonStyle = {
 //   ...buttonStyle,
 //   backgroundColor: "#474640",
 //   marginTop: "10px",
 // };
-
 
 // const formWrapperStyle = {
 //   width: "100%",

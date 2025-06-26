@@ -139,8 +139,8 @@ function Login() {
             onClick={() =>
               account.createOAuth2Session(
                 "google",
-                "http://localhost:5173/welcome",
-                "http://localhost:5173/welcome"
+                "https://react-auth-loginui.netlify.app/welcome", // ✅ success
+                "https://react-auth-loginui.netlify.app/welcome" // ✅ failure fallback too
               )
             }
           >
