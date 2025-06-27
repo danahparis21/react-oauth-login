@@ -19,21 +19,10 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Step 1: Create session (this still sets the cookie for desktop users)
       await account.createEmailPasswordSession(email, password);
-
-      // Step 2: Create JWT (for all devices including mobile)
-      const jwtResponse = await account.createJWT();
-      const jwt = jwtResponse.jwt;
-
-      // Step 3: Store it safely (used for manual authentication later)
-      localStorage.setItem("auth-token", jwt);
-
       toast.success("Logged in successfully!", {
         className: "custom-toast",
       });
-
-      // Step 4: Navigate to welcome screen
       navigate("/welcome");
     } catch (err) {
       console.error("Login error:", err);
