@@ -5,22 +5,25 @@ import "./App.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 function ForgotPassword() {
   const formRef = useRef(null);
   const [email, setEmail] = useState("");
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await account.createRecovery(email, "https://react-auth-loginui.netlify.app/reset");
+      await account.createRecovery(
+        email,
+        "https://react-auth-loginui.netlify.app/reset"
+      );
 
       console.log("📨preparing to send email...");
-      toast.success("If an account with that email exists, a recovery link has been sent.", {
-        className: "custom-toast",
-      });
-
+      toast.success(
+        "If an account with that email exists, a recovery link has been sent.",
+        {
+          className: "custom-toast",
+        }
+      );
     } catch (err) {
       console.error("Recovery error:", err);
       toast.error(err.message || "Something went wrong", {
@@ -43,8 +46,6 @@ function ForgotPassword() {
     el.addEventListener("mousemove", handleMouseMove);
     return () => el.removeEventListener("mousemove", handleMouseMove);
   }, []);
-  
-
 
   return (
     <div className="animated-bg">
@@ -58,11 +59,19 @@ function ForgotPassword() {
         draggable
         theme="dark"
       />
-      <div className="glass-circle" style={{ width: "220px", height: "220px", top: "10%", left: "10%" }}></div>
-      <div className="glass-circle" style={{ width: "320px", height: "320px", bottom: "5%", right: "10%" }}></div>
-  
+      <div
+        className="glass-circle"
+        style={{ width: "220px", height: "220px", top: "10%", left: "10%" }}
+      ></div>
+      <div
+        className="glass-circle"
+        style={{ width: "320px", height: "320px", bottom: "5%", right: "10%" }}
+      ></div>
+
       <div className="form-wrapper" ref={formRef}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Forgot Password</h2>
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+          Forgot Password
+        </h2>
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -73,13 +82,16 @@ function ForgotPassword() {
             className="input-field"
             style={inputStyle}
           />
-  
+
           <button type="submit" className="forgotPass-signup-btn">
             Send Recovery Email
           </button>
-  
+
           <p style={{ textAlign: "center", marginTop: "10px" }}>
-            <Link to="/login" style={{ color: "#d2b575", textDecoration: "none" }}>
+            <Link
+              to="/login"
+              style={{ color: "#d2b575", textDecoration: "none" }}
+            >
               Back to Login
             </Link>
           </p>
@@ -87,11 +99,7 @@ function ForgotPassword() {
       </div>
     </div>
   );
-  
 }
-
-
-
 
 const containerStyle = {
   height: "100vh",
@@ -125,9 +133,5 @@ const headingStyle = {
   color: "#fff",
   textShadow: "0 2px 4px rgba(0,0,0,0.2)",
 };
-
-
-
-
 
 export default ForgotPassword;
