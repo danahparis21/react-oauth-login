@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { account } from "./appwriteConfig";
 import emailjs from "emailjs-com";
 import { useRef } from "react";
-import './Welcome.css';
+import "./Welcome.css";
 
 emailjs.init(import.meta.env.VITE_EMAILJS_USER_ID);
 
@@ -28,6 +28,16 @@ function Welcome() {
           console.log("✅ Email verified via link!");
         }
 
+        const jwt = localStorage.getItem("auth-token");
+        if (jwt) {
+          try {
+            await account.updateSession(jwt);
+            console.log("🔐 JWT-based session applied");
+          } catch (err) {
+            console.warn("❌ Failed to use JWT session:", err);
+          }
+        }
+
         const user = await account.get();
         setUser(user);
         console.log("👤 User fetched:", user);
@@ -46,7 +56,7 @@ function Welcome() {
           user.emailVerification &&
           !localStorage.getItem(`welcomeSent:${user.$id}`) &&
           !hasSent.current
-        ){
+        ) {
           console.log("📨 Condition passed, preparing to send email...");
           hasSent.current = true;
 
@@ -66,7 +76,6 @@ function Welcome() {
 
         // Trigger card reveal after envelope animation
         setTimeout(() => setCardRevealed(true), 1500);
-
       } catch (err) {
         console.error("Not logged in or verification failed:", err);
         navigate("/login");
@@ -110,7 +119,10 @@ function Welcome() {
               <button className="welcome-logout-btn" onClick={handleLogout}>
                 Log Out
               </button>
-              <button className="welcome-signup-btn" onClick={() => navigate("/")}>
+              <button
+                className="welcome-signup-btn"
+                onClick={() => navigate("/")}
+              >
                 Go to Sign Up
               </button>
             </div>

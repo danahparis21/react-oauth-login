@@ -20,6 +20,11 @@ function Login() {
     e.preventDefault();
     try {
       await account.createEmailPasswordSession(email, password);
+
+      // 🔑 Store JWT for incognito/manual session fallback
+      const jwtResponse = await account.createJWT();
+      localStorage.setItem("auth-token", jwtResponse.jwt);
+
       toast.success("Logged in successfully!", {
         className: "custom-toast",
       });
