@@ -4,10 +4,25 @@ import { account } from "./appwriteConfig";
 import emailjs from "emailjs-com";
 import { useRef } from "react";
 import "./Welcome.css";
+import { Client, Account } from "appwrite";
+
 
 emailjs.init(import.meta.env.VITE_EMAILJS_USER_ID);
 
+// ✅ Create Appwrite Client and Account manually with JWT
+const client = new Client()
+  .setEndpoint("https://syd.cloud.appwrite.io/v1")
+  .setProject("6858d7e50002f2db3a84"); // your actual project ID
+
+const jwt = localStorage.getItem("auth-token");
+if (jwt) {
+  client.setJWT(jwt);
+}
+const account = new Account(client);
+
+
 function Welcome() {
+  
   const [user, setUser] = useState(null);
   const [cardRevealed, setCardRevealed] = useState(false);
   const navigate = useNavigate();
@@ -28,15 +43,6 @@ function Welcome() {
           console.log("✅ Email verified via link!");
         }
 
-        const jwt = localStorage.getItem("auth-token");
-        if (jwt) {
-          try {
-            await account.updateSession(jwt);
-            console.log("🔐 JWT-based session applied");
-          } catch (err) {
-            console.warn("❌ Failed to use JWT session:", err);
-          }
-        }
 
         const user = await account.get();
         setUser(user);
