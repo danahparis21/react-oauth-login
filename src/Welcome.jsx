@@ -18,78 +18,82 @@ function Welcome() {
   useEffect(() => {
     const fetchUser = async () => {
       console.log("🌀 useEffect triggered");
-  
+
       const queryParams = new URLSearchParams(location.search);
       const userId = queryParams.get("userId");
       const secret = queryParams.get("secret");
-  
+
       try {
         if (userId && secret) {
           await account.updateVerification(userId, secret);
           console.log("✅ Email verified via link!");
         }
-  
-        // 🧠 Set up new client with JWT
-        const client = new Client()
-          .setEndpoint("https://syd.cloud.appwrite.io/v1")
-          .setProject("your-project-id")
-          .setJWT(localStorage.getItem("auth-token")); // ✅ Use stored JWT
-  
-        const jwtAccount = new Account(client);
-        const user = await jwtAccount.get(); // ✅ moved outside inner try
-        setUser(user);
-        console.log("👤 User fetched:", user);
-        console.log("🔍 Email verified?", user.emailVerification);
-  
-        if (!localStorage.getItem(`greeted:${user.$id}`)) {
-          const isNewUser = !localStorage.getItem(`welcomeSent:${user.$id}`);
-          const message = isNewUser
-            ? `Welcome${user.name ? `, ${user.name}` : ""}!`
-            : `Welcome back${user.name ? `, ${user.name}` : ""}!`;
-          console.log("User exists");
-          localStorage.setItem(`greeted:${user.$id}`, "true");
+
+        const jwt = localStorage.getItem("auth-token");
+        if (!jwt) {
+          console.warn("⚠️ No JWT found in localStorage!");
+          navigate("/login");
+          return;
         }
-  
+
+        // ✅ Apply JWT to authenticate current session
+        await account.updateSession(jwt);
+
+        const userData = await account.get();
+        setUser(userData);
+        console.log("👤 User fetched:", userData);
+        console.log("🔍 Email verified?", userData.emailVerification);
+
+        if (!localStorage.getItem(`greeted:${userData.$id}`)) {
+          const isNewUser = !localStorage.getItem(`welcomeSent:${userData.$id}`);
+          const message = isNewUser
+            ? `Welcome${userData.name ? `, ${userData.name}` : ""}!`
+            : `Welcome back${userData.name ? `, ${userData.name}` : ""}!`;
+          console.log(message);
+          localStorage.setItem(`greeted:${userData.$id}`, "true");
+        }
+
         if (
-          user.emailVerification &&
-          !localStorage.getItem(`welcomeSent:${user.$id}`) &&
+          userData.emailVerification &&
+          !localStorage.getItem(`welcomeSent:${userData.$id}`) &&
           !hasSent.current
         ) {
-          console.log("📨 Condition passed, preparing to send email...");
+          console.log("📨 Sending welcome email...");
           hasSent.current = true;
-  
+
           await emailjs.send(
             import.meta.env.VITE_EMAILJS_SERVICE_ID,
             import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
             {
-              username: user.name,
-              email: user.email,
-            },
-            import.meta.env.VITE_EMAILJS_USER_ID
+              username: userData.name,
+              email: userData.email,
+            }
           );
-  
-          console.log("✅ Welcome Email Sent to verified user");
-          localStorage.setItem(`welcomeSent:${user.$id}`, "true");
+
+          console.log("✅ Welcome Email Sent!");
+          localStorage.setItem(`welcomeSent:${userData.$id}`, "true");
         }
-  
+
         setTimeout(() => setCardRevealed(true), 1500);
-  
       } catch (err) {
-        console.error("Not logged in or verification failed:", err);
+        console.error("❌ Login/Verification failed:", err);
         navigate("/login");
       }
     };
-  
+
     fetchUser();
   }, [navigate, location]);
-  
 
   const handleLogout = async () => {
-    await account.deleteSessions();
-    localStorage.removeItem("welcomeSent");
+    try {
+      await account.deleteSessions(); // clears all sessions
+    } catch (err) {
+      console.warn("Logout error:", err);
+    }
+    localStorage.clear();
     navigate("/login");
   };
-
+  
   return (
     <div className="welcome-page">
       {user ? (
