@@ -43,7 +43,7 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const { label } = getStrength();
     if (label !== "Strong")
       return toast.warning("Password is not strong enough", {
@@ -61,68 +61,47 @@ function App() {
       return toast.info("Please enter an email address", {
         className: "custom-toast",
       });
-  
-      try {
-        // 1. Create user
-        const res = await account.create(
-          ID.unique(),
-          email,
-          password,
-          username.trim()
-        );
-        console.log("User created:", res);
-        toast.success("Account created successfully!", {
+
+    try {
+      // ✅ Create the user account
+      const res = await account.create(
+        ID.unique(),
+        email,
+        password,
+        username.trim()
+      );
+      console.log("User created:", res);
+      toast.success("Account created successfully!", {
+        className: "custom-toast",
+      });
+
+      await account.createEmailPasswordSession(email, password);
+      console.log("User session created.");
+
+      await account.createVerification("https://react-auth-loginui.netlify.app/welcome");
+
+      toast.success("Verification email sent! Please check your inbox.", {
+        className: "custom-toast",
+      });
+
+      navigate("/welcome");
+    } catch (err) {
+      if (err.code === 429) {
+        toast.warning("Too many requests. Please wait a minute.", {
           className: "custom-toast",
         });
-      
-        try {
-          // 2. Try creating session (in case not auto-created)
-          await account.createEmailPasswordSession(email, password);
-          console.log("Session created manually.");
-        } catch (sessionErr) {
-          if (
-            sessionErr.message?.includes("session is active") ||
-            sessionErr.code === 401
-          ) {
-            console.warn("Session already active, skipping manual login");
-          } else {
-            throw sessionErr; // re-throw unexpected errors
-          }
-        }
-      
-        // 3. Send verification
-        await account.createVerification(
-          "https://react-auth-loginui.netlify.app/welcome"
-        );
-      
-        toast.success("Verification email sent!", {
+      } else if (err.code === 409) {
+        toast.error("User already exists. Try logging in.", {
           className: "custom-toast",
         });
-      
-        // 4. Create JWT for fallback use (e.g. incognito)
-        const jwt = await account.createJWT();
-        localStorage.setItem("auth-token", jwt.jwt);
-      
-        navigate("/welcome");
-      } catch (err) {
-        if (err.code === 409) {
-          toast.error("User already exists. Try logging in.", {
-            className: "custom-toast",
-          });
-        } else if (err.code === 429) {
-          toast.warning("Too many requests. Please wait a minute.", {
-            className: "custom-toast",
-          });
-        } else {
-          console.error("Appwrite signup error:", err);
-          toast.error("Something went wrong. Please try again.", {
-            className: "custom-toast",
-          });
-        }
+      } else {
+        console.error("Appwrite signup error:", err);
+        toast.error("User already exists. Try logging in.", {
+          className: "custom-toast",
+        });
       }
-      
+    }
   };
-  
 
   useEffect(() => {
     const el = formRef.current;

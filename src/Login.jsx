@@ -18,33 +18,20 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
     try {
-      // 👣 Step 0: Clean up old sessions & JWTs
-      await account.deleteSessions(); // in case any ghost sessions exist
-      localStorage.removeItem("auth-token");
-  
-      // 👣 Step 1: Create a new session
       await account.createEmailPasswordSession(email, password);
-      console.log("🔐 Session created");
-  
-      // 👣 Step 2: Confirm the session actually worked
-      const user = await account.get();
-      console.log("👤 Logged in user:", user);
-  
-      // 👣 Step 3: Store fallback JWT for incognito/manual session restoration
+
+      // 🔑 Store JWT for incognito/manual session fallback
       const jwtResponse = await account.createJWT();
       localStorage.setItem("auth-token", jwtResponse.jwt);
-  
-      // 👣 Step 4: Success toast and navigation
+
       toast.success("Logged in successfully!", {
         className: "custom-toast",
       });
-  
       navigate("/welcome");
     } catch (err) {
       console.error("Login error:", err);
-  
+
       if (err.code === 429) {
         toast.warning("Too many requests. Please wait a minute.", {
           className: "custom-toast",
@@ -68,7 +55,6 @@ function Login() {
       }
     }
   };
-  
 
   useEffect(() => {
     const el = formRef.current;
