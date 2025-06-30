@@ -93,21 +93,13 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 <br>
 
 <p align="center">
-  <img src="images/startup-page.jpg" width="300"/>
-  <img src="images/login.jpg" width="300"/>
-  <img src="images/customer-menu.jpg" width="300"/>
+  <img src="images/reset-password.jpg" width="400" height="200"/>
+  <img src="images/login.jpg" width="400" height="200"/>
 </p>
 <p align="center">
-   
-  <img src="images/checkout.jpg" width="300"/>
-  <img src="images/email_notifications.jpg" width="300"/>
-  <img src="images/admin-dashboard.jpg" width="300"/>
-</p>
-<p align="center">
-   <img src="images/menu-management.jpg" width="300"/>
-  <img src="images/order-list-admin.jpg" width="300"/>
-  <img src="images/rider-dashboard.jpg" width="300"/>
-</p>
+  <img src="images/welcome-page.jpg" width="400" height="200" />
+  <img src="images/welcome-gif.gif" width="400" height="200"/>
+
 </details>
 ---
 
