@@ -1,87 +1,131 @@
-# 📚 Library System – Auth App (React + Vite + Appwrite + EmailJS)
+# 📚 Library Auth App – React + Vite + Appwrite + EmailJS
 
-Welcome to the **Library Auth App** — a beautifully designed, glassmorphic user authentication system built with **React**, **Vite**, and **Appwrite**, complete with Google OAuth, secure password recovery, and stunning animations.
+A beautifully designed, **glassmorphic** user authentication system built with **React**, **Vite**, and **Appwrite**. Features **Google OAuth**, secure email login, password recovery, and stunning UI animations.
 
-> ✨ Perfect for portfolios, real-world projects, and scaling with full-stack services!
+> 🔗 [🌐 Live Demo](https://react-auth-loginui.netlify.app/)
 
 ---
+
+## 📑 Table of Contents
+
+- [🚀 Features](#-features)
+- [🧰 Tech Stack](#-tech-stack)
+- [🧪 Getting Started](#-getting-started)
+- [🎨 UI Design](#-ui-design)
+- [🔐 Security](#-security)
+- [📧 Email System](#-email-system)
+- [📷 Screenshots](#-screenshots)
+- [🤝 Contributions](#-contributions)
+- [📄 License](#-license)
+
+---
+
 ## 🚀 Features
 
-- 🔐 **Secure Authentication** (Appwrite-based)
-- 🧾 **Sign Up / Login with Email + Google OAuth**
-- 🛡️ **Password Strength Meter + Checklist**
-- 📩 **Password Recovery via Email**
-- ✅ **Email Verification (via Appwrite)**
-- 💌 **Welcome Email (EmailJS-powered)**
-- 🌈 **Glassmorphism UI with Soft Glowing Effects**
-- 📱 **Responsive & Mobile-Friendly**
-- 🪄 **Custom Toast Notifications**
+- 🔐 **Secure Appwrite Authentication**
+- 🧾 **Email + Google OAuth Login**
+- ✅ **Email Verification**
+- 📩 **Password Recovery**
+- 💌 **Welcome Email (EmailJS)**
+- 🧠 **Password Strength Meter + Checklist**
+- 🪄 **Animated Glassmorphism UI**
+- 📱 **Fully Responsive**
+- 🔔 **Custom Toast Notifications**
 
 ---
 
 ## 🧰 Tech Stack
 
-| Tech             | Usage                               |
-|------------------|-------------------------------------|
-| **React + Vite** | Frontend framework + fast build tool |
-| **Appwrite**     | Auth, database, email verification  |
-| **EmailJS**      | Custom welcome email                |
-| **Toastify**     | Stylish toast notifications         |
-| **Google OAuth** | One-click signup/login              |
-| **CSS + Glassmorphism** | Modern UI and animations     |
+| Tech               | Purpose                             |
+|--------------------|-------------------------------------|
+| **React + Vite**   | Fast modern frontend                |
+| **Appwrite**       | Auth, DB, email verification        |
+| **EmailJS**        | Custom welcome email on signup      |
+| **Google OAuth**   | One-click login/signup              |
+| **React Toastify** | Beautiful toast notifications       |
+| **CSS Effects**    | Glassmorphism, hover, and glow UI   |
 
 ---
 
+## 🧪 Getting Started
 
-🛠️ Getting Started
-git clone https://github.com/danahparis21/react-oauth-login
-
-cd library-auth-app
-
-npm install
-
-npm run dev
+- git clone https://github.com/danahparis21/react-oauth-login
+- cd library-auth-app
+- npm install
+- npm run dev
 
 
-✨ UI Design
-Uses glassmorphism with glowing hover effects
-Fully animated UI using CSS transitions
-Clean and minimal aesthetic
-Mobile-friendly with consistent layout
+## 🎨 UI Design
 
-🔐 Security
-Appwrite handles backend-level security
-Password reset links are time-limited and token-protected
-OAuth with Google follows secure redirect protocols
-Emails are verified before user access
+- Glassmorphism with soft blur & glow effects  
+- Fully animated UI (CSS transitions)  
+- Minimalist layout with bold icons  
+- Mobile-first responsiveness  
+- Accessible color contrast  
 
-📧 Email System
-Verification & Reset Password:
-Managed via Appwrite's domain
-Contains secure userId and secret parameters
+---
 
-Welcome Email:
-Sent via EmailJS upon successful signup
-Includes brand-colored button and contact info
+## 🔐 Security
 
+- Email login & reset via **Appwrite** with token validation  
+- OAuth with Google using secure redirect & client secrets  
+- Password hashing & recovery logic handled backend-side  
+- Email verification required before user access  
 
+---
 
-🌐 Deployment
-Deployed using:
- Vercel
- 
- Netlify
+## 📧 Email System
 
- Render
+### Verification & Password Reset
+- Managed by Appwrite  
+- Secured using unique `userId` and secret token  
 
+### Welcome Email
+- Sent automatically via **EmailJS** after successful signup  
+- Includes brand-colored button and contact information  
 
-Be sure to update your Appwrite project domain to match your deployed frontend URL.
+---
 
-🤝 Contributions
-Pull requests and suggestions are welcome! For major changes, please open an issue first.
+## 📸 Screenshots
+<details>
+<summary>Click to view screenshots 📷</summary>
 
-📄 License
-MIT – Free to use and modify with attribution.
+<br>
 
+<p align="center">
+  <img src="images/startup-page.jpg" width="300"/>
+  <img src="images/login.jpg" width="300"/>
+  <img src="images/customer-menu.jpg" width="300"/>
+</p>
+<p align="center">
+   
+  <img src="images/checkout.jpg" width="300"/>
+  <img src="images/email_notifications.jpg" width="300"/>
+  <img src="images/admin-dashboard.jpg" width="300"/>
+</p>
+<p align="center">
+   <img src="images/menu-management.jpg" width="300"/>
+  <img src="images/order-list-admin.jpg" width="300"/>
+  <img src="images/rider-dashboard.jpg" width="300"/>
+</p>
+</details>
+---
 
+## 🤝 Contributions
 
+Pull requests and ideas are welcome!  
+For major changes, please open an issue to discuss them first.
+
+---
+
+## 📄 License
+
+**MIT License** – Free to use, remix, or build upon, with attribution.
+
+---
+
+## 🙌 Developer
+
+Built with 💖 by **Danah Paris**  
+📧 Email: [micadanah21@gmail.com](mailto:micadanah21@gmail.com)  
+📍 BatStateU – BSIT Student
