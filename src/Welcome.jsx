@@ -6,7 +6,6 @@ import { useRef } from "react";
 import "./Welcome.css";
 import { Client, Account } from "appwrite";
 
-
 emailjs.init(import.meta.env.VITE_EMAILJS_USER_ID);
 
 // ✅ Create Appwrite Client and Account manually with JWT
@@ -20,9 +19,7 @@ if (jwt) {
 }
 const account = new Account(client);
 
-
 function Welcome() {
-  
   const [user, setUser] = useState(null);
   const [cardRevealed, setCardRevealed] = useState(false);
   const navigate = useNavigate();
@@ -42,7 +39,6 @@ function Welcome() {
           await account.updateVerification(userId, secret);
           console.log("✅ Email verified via link!");
         }
-
 
         const user = await account.get();
         setUser(user);
