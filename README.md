@@ -35,8 +35,11 @@ Welcome to the **Library Auth App** — a beautifully designed, glassmorphic use
 
 🛠️ Getting Started
 git clone https://github.com/danahparis21/react-oauth-login
+
 cd library-auth-app
+
 npm install
+
 npm run dev
 
 
@@ -66,7 +69,9 @@ Includes brand-colored button and contact info
 🌐 Deployment
 Deployed using:
  Vercel
+ 
  Netlify
+
  Render
 
 
