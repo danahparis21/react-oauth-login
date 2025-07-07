@@ -1,4 +1,4 @@
-# Library Auth App – React + Vite + Appwrite + EmailJS
+# Login with OAuth– React + Vite + Appwrite + EmailJS
 
 A beautifully designed, **glassmorphic** user authentication system built with **React**, **Vite**, and **Appwrite**. Features **Google OAuth**, secure email login, password recovery, and stunning UI animations.
 
