@@ -1,4 +1,4 @@
-# 📚 Library Auth App – React + Vite + Appwrite + EmailJS
+# Library Auth App – React + Vite + Appwrite + EmailJS
 
 A beautifully designed, **glassmorphic** user authentication system built with **React**, **Vite**, and **Appwrite**. Features **Google OAuth**, secure email login, password recovery, and stunning UI animations.
 
@@ -6,31 +6,31 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [🚀 Features](#-features)
-- [🧰 Tech Stack](#-tech-stack)
-- [🧪 Getting Started](#-getting-started)
-- [🎨 UI Design](#-ui-design)
-- [🔐 Security](#-security)
-- [📧 Email System](#-email-system)
-- [📷 Screenshots](#-screenshots)
-- [🤝 Contributions](#-contributions)
-- [📄 License](#-license)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [UI Design](#-ui-design)
+- [Security](#-security)
+- [Email System](#-email-system)
+- [Screenshots](#-screenshots)
+- [Contributions](#-contributions)
+- [License](#-license)
 
 ---
 
-## 🚀 Features
+## Features
 
-- 🔐 **Secure Appwrite Authentication**
-- 🧾 **Email + Google OAuth Login**
-- ✅ **Email Verification**
-- 📩 **Password Recovery**
-- 💌 **Welcome Email (EmailJS)**
-- 🧠 **Password Strength Meter + Checklist**
-- 🪄 **Animated Glassmorphism UI**
-- 📱 **Fully Responsive**
-- 🔔 **Custom Toast Notifications**
+- **Secure Appwrite Authentication**
+- **Email + Google OAuth Login**
+- **Email Verification**
+- **Password Recovery**
+- **Welcome Email (EmailJS)**
+- **Password Strength Meter + Checklist**
+- **Animated Glassmorphism UI**
+- **Fully Responsive**
+- **Custom Toast Notifications**
 
 ---
 
@@ -47,7 +47,7 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 
 ---
 
-## 🧪 Getting Started
+## Getting Started
 
 - git clone https://github.com/danahparis21/react-oauth-login
 - cd library-auth-app
@@ -55,7 +55,7 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 - npm run dev
 
 
-## 🎨 UI Design
+## UI Design
 
 - Glassmorphism with soft blur & glow effects  
 - Fully animated UI (CSS transitions)  
@@ -65,7 +65,7 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 
 ---
 
-## 🔐 Security
+## Security
 
 - Email login & reset via **Appwrite** with token validation  
 - OAuth with Google using secure redirect & client secrets  
@@ -74,7 +74,7 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 
 ---
 
-## 📧 Email System
+## Email System
 
 ### Verification & Password Reset
 - Managed by Appwrite  
@@ -86,7 +86,7 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 <details>
 <summary>Click to view screenshots 📷</summary>
 
@@ -103,20 +103,20 @@ A beautifully designed, **glassmorphic** user authentication system built with *
 </details>
 ---
 
-## 🤝 Contributions
+## Contributions
 
 Pull requests and ideas are welcome!  
 For major changes, please open an issue to discuss them first.
 
 ---
 
-## 📄 License
+## License
 
 **MIT License** – Free to use, remix, or build upon, with attribution.
 
 ---
 
-## 🙌 Developer
+##  Developer
 
 Built with 💖 by **Danah Paris**  
 📧 Email: [micadanah21@gmail.com](mailto:micadanah21@gmail.com)  
